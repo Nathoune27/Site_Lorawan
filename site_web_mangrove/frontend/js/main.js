@@ -32,7 +32,7 @@ async function applyFilters() {
 
 
 // Fonction pour remplir le tableau avec les données
-function populateTable(data) {
+async function populateTable(data) {
     const tbody = document.getElementById('table').getElementsByTagName('tbody')[0];
     tbody.innerHTML = '';
 

@@ -2,16 +2,16 @@
 // backend/exportData.php
 require_once '../db/dbConfig.php';
 
-$type = $_GET['type'] ?? null;
+// $type = $_GET['type'] ?? null;
 $startDate = $_GET['start'] ?? null;
 $endDate = $_GET['end'] ?? null;
 
 try {
-    $query = "SELECT * FROM Data WHERE 1=1";
+    $query = 'SELECT * FROM "Data" WHERE 1=1';
 
-    if ($type) {
-        $query .= " AND type = :type";
-    }
+    // if ($type) {
+    //     $query .= " AND type = :type";
+    // }
     if ($startDate) {
         $query .= " AND time >= :start";
     }
@@ -21,9 +21,9 @@ try {
 
     $stmt = $pdo->prepare($query);
 
-    if ($type) {
-        $stmt->bindParam(':type', $type);
-    }
+    // if ($type) {
+    //     $stmt->bindParam(':type', $type);
+    // }
     if ($startDate) {
         $stmt->bindParam(':start', $startDate);
     }
