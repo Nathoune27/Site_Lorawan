@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affichage des Données de Capteurs</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Affichage des Données de Capteurs</h1>
+
+    <!-- Filtres de sélection de types de données -->
+    <section id="filters">
+        <div id="type-checkboxes"></div> <!-- Cases à cocher générées ici -->
+        
+        <label for="start">Date de début :</label>
+        <input type="date" id="start">
+
+        <label for="end">Date de fin :</label>
+        <input type="date" id="end">
+
+        <button onclick="applyFilters()">Appliquer les filtres</button>
+        <button onclick="exportCSV()">Exporter en CSV</button>
+    </section>
+
+
+    <!-- Tableau de données -->
+    <section id="data-table">
+        <h2>Données</h2>
+        <table id="table">
+            <thead>
+                <tr>
+                    <th>DevEUI</th>
+                    <th>Temps</th>
+                    <th>Type</th>
+                    <th>Valeur</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Les données seront insérées ici par JavaScript -->
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Section de graphique -->
+    <section id="graphs">
+        <h2>Graphiques</h2>
+        <div id="grafanaGraph" class="graph"></div>
+        <div id="d3Graph" class="graph"></div>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script src="js/grafana.js"></script>
+    <script src="js/d3charts.js"></script>
+</body>
+</html>

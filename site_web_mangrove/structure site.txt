@@ -1,0 +1,27 @@
+🔧 Plan du Projet
+Base de Données : Le script fourni est bien structuré et permet de relier les données de capteurs via devEUI. La structure actuelle suffira pour gérer les besoins.
+
+API Backend (PHP) :
+
+Récupération des données : Endpoints pour récupérer les données selon les filtres de l’utilisateur.
+Exportation CSV : Génération d’un fichier CSV depuis les données filtrées.
+Frontend (HTML/CSS/JavaScript)
+
+Deux options pour les graphiques :
+Version Grafana : Utiliser des panneaux Grafana embarqués pour les graphiques (connexion via URL d’iframe).
+Version D3.js : Utiliser D3.js pour générer des graphiques personnalisés.
+Filtrage et affichage : Filtres pour sélectionner les données à afficher, et tableau pour afficher les données.
+
+📁 projet-affichage-donnees
+├── 📁 backend
+│   ├── getData.php            # Endpoint pour récupérer les données
+│   ├── exportData.php         # Endpoint pour l’exportation CSV
+├── 📁 frontend
+│   ├── index.html             # Interface principale avec le choix entre Grafana et D3.js
+│   ├── style.css              # Styles pour l’interface
+│   ├── 📁 js
+│   │   ├── main.js            # Code JS général pour les filtres et le tableau
+│   │   ├── grafana.js         # Code JS pour l’intégration de Grafana
+│   │   └── d3charts.js        # Code JS pour les graphiques D3.js
+└── 📁 db
+    └── dbConfig.php           # Configuration de la connexion PostgreSQL

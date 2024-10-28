@@ -1,0 +1,40 @@
+/* style.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#filters, #data-table, #graphs {
+    margin: 20px 0;
+}
+
+label {
+    margin-right: 10px;
+}
+
+#table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#table th, #table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+#graphs {
+    display: flex;
+    justify-content: space-around;
+}
+
+.graph {
+    width: 45%;
+    height: 400px;
+}
