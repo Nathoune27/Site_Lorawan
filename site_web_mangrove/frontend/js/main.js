@@ -33,17 +33,32 @@ async function applyFilters() {
 
 // Fonction pour remplir le tableau avec les données
 async function populateTable(data) {
-    const tbody = document.getElementById('table').getElementsByTagName('tbody')[0];
+    const table = document.getElementById('table');
+    const thead = table.getElementsByTagName('thead')[0];
+    const tbody = table.getElementsByTagName('tbody')[0];
+    thead.innerHTML = '';
     tbody.innerHTML = '';
 
+    // Ajouter les en-têtes dynamiquement
+    if (data.length > 0) {
+        const headers = Object.keys(data[0]);
+        const tr = document.createElement('tr');
+        headers.forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            tr.appendChild(th);
+        });
+        thead.appendChild(tr);
+    }
+
+    // Ajouter les données du tableau
     data.forEach(row => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${row.devEUI}</td>
-            <td>${row.time}</td>
-            <td>${row.type}</td>
-            <td>${row.data}</td>
-        `;
+        Object.values(row).forEach(value => {
+            const td = document.createElement('td');
+            td.textContent = value;
+            tr.appendChild(td);
+        });
         tbody.appendChild(tr);
     });
 }

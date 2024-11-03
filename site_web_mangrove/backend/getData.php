@@ -20,6 +20,8 @@ try {
         $query .= " AND time <= :end";
     }
 
+    $query .= " ORDER BY time ASC";
+    
     $stmt = $pdo->prepare($query);
 
     // foreach ($types as $index => $type) {
