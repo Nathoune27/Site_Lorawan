@@ -6,11 +6,11 @@ async function loadDataTypes() {
     const types = await response.json();
     
     const checkboxesDiv = document.getElementById('type-checkboxes');
-    types.forEach(type => {
-        const label = document.createElement('label');
-        label.innerHTML = `<input type="checkbox" value="${type}" class="type-checkbox"> ${type}`;
-        checkboxesDiv.appendChild(label);
-    });
+    // types.forEach(type => {
+    //     const label = document.createElement('label');
+    //     label.innerHTML = `<input type="checkbox" value="${type}" class="type-checkbox"> ${type}`;
+    //     checkboxesDiv.appendChild(label);
+    // });
 }
 
 // Appeler loadDataTypes() lors du chargement de la page
@@ -48,10 +48,42 @@ async function populateTable(data) {
     });
 }
 
+// Fonction pour convertir le tableau en CSV
+function tableToCSV() {
+    let csv_data = [];
+    let rows = document.querySelectorAll('#table tr');
+    
+    // Get headers
+    let headers = Array.from(rows[0].querySelectorAll('th')).map(th => th.textContent);
+    csv_data.push(headers.join(','));
+
+    // Get rows data
+    for (let i = 1; i < rows.length; i++) {
+        let cols = rows[i].querySelectorAll('td');
+        let csvrow = [];
+        for (let j = 0; j < cols.length; j++) {
+            csvrow.push(cols[j].textContent);
+        }
+        csv_data.push(csvrow.join(","));
+    }
+    return csv_data.join('\n');
+}
+
+// Fonction pour télécharger le fichier CSV
+function downloadCSVFile(csv_data) {
+    const CSVFile = new Blob([csv_data], { type: "text/csv" });
+    const temp_link = document.createElement('a');
+    temp_link.download = "data.csv";
+    const url = window.URL.createObjectURL(CSVFile);
+    temp_link.href = url;
+    temp_link.style.display = "none";
+    document.body.appendChild(temp_link);
+    temp_link.click();
+    document.body.removeChild(temp_link);
+}
+
 // Fonction pour exporter les données en CSV
 function exportCSV() {
-    const type = document.getElementById('type').value;
-    const start = document.getElementById('start').value;
-    const end = document.getElementById('end').value;
-    window.location.href = `../backend/exportData.php?type=${type}&start=${start}&end=${end}`;
+    const csv_data = tableToCSV();
+    downloadCSVFile(csv_data);
 }
