@@ -23,6 +23,7 @@ function updateD3(data) {
 
     data.forEach(d => {
         d.time = parseTime(d.time);
+        d.data = +d.data;
     });
 
     x.domain(d3.extent(data, d => d.time));
