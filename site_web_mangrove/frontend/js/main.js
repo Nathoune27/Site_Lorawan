@@ -52,7 +52,7 @@ async function applyFilters() {
         const columnQuery = columns.join(',');
         const response = await fetch(`../backend/getData.php?types=${typeQuery}&columns=${columnQuery}&start=${start}&end=${end}`);
         const data = await response.json();
-        populateTable(data);
+        populateTable(data, columns);
         updateD3(data);
     } catch (error) {
         console.error('Erreur lors de l\'application des filtres:', error);
@@ -60,7 +60,7 @@ async function applyFilters() {
 }
 
 // Fonction pour remplir le tableau avec les données
-async function populateTable(data) {
+async function populateTable(data, columns) {
     const table = document.getElementById('table');
     const thead = table.getElementsByTagName('thead')[0];
     const tbody = table.getElementsByTagName('tbody')[0];
@@ -70,24 +70,27 @@ async function populateTable(data) {
     // Trier les données par la colonne "time"
     data.sort((a, b) => new Date(a.time) - new Date(b.time));
 
+    // Ordre des colonnes souhaité
+    const headersOrder = ['devEUI', 'time', 'type', 'data'];
+
+    // Filtrer les colonnes sélectionnées dans l'ordre souhaité
+    const selectedHeaders = headersOrder.filter(header => columns.includes(header));
+
     // Ajouter les en-têtes dynamiquement
-    if (data.length > 0) {
-        const headers = Object.keys(data[0]);
-        const tr = document.createElement('tr');
-        headers.forEach(header => {
-            const th = document.createElement('th');
-            th.textContent = header;
-            tr.appendChild(th);
-        });
-        thead.appendChild(tr);
-    }
+    const tr = document.createElement('tr');
+    selectedHeaders.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        tr.appendChild(th);
+    });
+    thead.appendChild(tr);
 
     // Ajouter les données du tableau
     data.forEach(row => {
         const tr = document.createElement('tr');
-        Object.values(row).forEach(value => {
+        selectedHeaders.forEach(header => {
             const td = document.createElement('td');
-            td.textContent = value;
+            td.textContent = row[header];
             tr.appendChild(td);
         });
         tbody.appendChild(tr);
