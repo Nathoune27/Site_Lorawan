@@ -19,7 +19,9 @@ try {
     $query = "SELECT $columnsList FROM \"Data\" WHERE 1=1";
 
     if (!empty($types) && $types[0] !== '') {
-        $placeholders = implode(',', array_fill(0, count($types), '?'));
+        $placeholders = implode(',', array_map(function($index) {
+            return ":type$index";
+        }, array_keys($types)));
         $query .= " AND type IN ($placeholders)";
     }
     if ($startDate) {
@@ -35,7 +37,7 @@ try {
 
     if (!empty($types) && $types[0] !== '') {
         foreach ($types as $index => $type) {
-            $stmt->bindValue($index + 1, $type);
+            $stmt->bindValue(":type$index", $type);
         }
     }
     if ($startDate) {
@@ -50,6 +52,6 @@ try {
 
     echo json_encode($results);
 } catch (Exception $e) {
-    echo json_encode(['error' => 'Erreur lors de la récupération des données']);
+    echo json_encode(['error' => $e->getMessage()]);
 }
 ?>

@@ -26,7 +26,7 @@ async function loadColumnNames() {
         const checkboxesDiv = document.getElementById('column-checkboxes');
         columns.forEach(column => {
             const label = document.createElement('label');
-            label.innerHTML = `<input type="checkbox" value="${column}" class="column-checkbox"> ${column}`;
+            label.innerHTML = `<input type="checkbox" value="${column}" class="column-checkbox" checked> ${column}`;
             checkboxesDiv.appendChild(label);
         });
     } catch (error) {
@@ -67,11 +67,9 @@ async function populateTable(data, columns) {
     thead.innerHTML = '';
     tbody.innerHTML = '';
 
-    // Trier les données par la colonne "time"
-    data.sort((a, b) => new Date(a.time) - new Date(b.time));
-
     // Ordre des colonnes souhaité
     const headersOrder = ['devEUI', 'time', 'type', 'data'];
+    
 
     // Filtrer les colonnes sélectionnées dans l'ordre souhaité
     const selectedHeaders = headersOrder.filter(header => columns.includes(header));
