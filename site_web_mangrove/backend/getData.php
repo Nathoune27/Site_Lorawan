@@ -2,12 +2,21 @@
 // backend/getData.php
 require_once '../db/dbConfig.php';
 
+$columns = explode(',', $_GET['columns'] ?? '');
 $types = explode(',', $_GET['types'] ?? '');
 $startDate = $_GET['start'] ?? null;
 $endDate = $_GET['end'] ?? null;
 
 try {
-    $query = 'SELECT * FROM "Data" WHERE 1=1';
+    // Construire la liste des colonnes à sélectionner
+    $columnsList = '*';
+    if (!empty($columns) && $columns[0] !== '') {
+        $columnsList = implode(',', array_map(function($col) {
+            return '"' . $col . '"';
+        }, $columns));
+    }
+
+    $query = "SELECT $columnsList FROM \"Data\" WHERE 1=1";
 
     if (!empty($types) && $types[0] !== '') {
         $placeholders = implode(',', array_fill(0, count($types), '?'));

@@ -10,9 +10,21 @@ h1 {
     text-align: center;
 }
 
-#filters, #data-table, #graphs {
-    margin: 20px 0;
+h3 {
+    text-decoration: underline;
 }
+
+#first_bloc {
+    display: flex;
+    /* justify-content: space-around; */
+    margin: 20px 0;
+    border: 1px solid black;
+}
+
+#first_bloc section div {
+    margin-right: 50px;
+}
+
 
 label {
     margin-right: 10px;
@@ -38,3 +50,4 @@ label {
     width: 45%;
     height: 400px;
 }
+

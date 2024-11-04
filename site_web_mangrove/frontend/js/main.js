@@ -17,29 +17,47 @@ async function loadDataTypes() {
     }
 }
 
+// Fonction pour charger les noms des colonnes depuis la base et générer les cases à cocher
+async function loadColumnNames() {
+    try {
+        const response = await fetch('../backend/getColumns.php');
+        const columns = await response.json();
+        
+        const checkboxesDiv = document.getElementById('column-checkboxes');
+        columns.forEach(column => {
+            const label = document.createElement('label');
+            label.innerHTML = `<input type="checkbox" value="${column}" class="column-checkbox"> ${column}`;
+            checkboxesDiv.appendChild(label);
+        });
+    } catch (error) {
+        console.error('Erreur lors du chargement des noms des colonnes:', error);
+    }
+}
 
-// Appeler loadDataTypes() lors du chargement de la page
-document.addEventListener("DOMContentLoaded", loadDataTypes);
+// Appeler loadDataTypes() et loadColumnNames() lors du chargement de la page
+document.addEventListener("DOMContentLoaded", () => {
+    loadDataTypes();
+    loadColumnNames();
+});
 
 // Fonction pour appliquer les filtres
 async function applyFilters() {
     try {
         const types = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(cb => cb.value);
+        const columns = Array.from(document.querySelectorAll('.column-checkbox:checked')).map(cb => cb.value);
         const start = document.getElementById('start').value;
         const end = document.getElementById('end').value;
 
         const typeQuery = types.join(',');
-        const response = await fetch(`../backend/getData.php?types=${typeQuery}&start=${start}&end=${end}`);
+        const columnQuery = columns.join(',');
+        const response = await fetch(`../backend/getData.php?types=${typeQuery}&columns=${columnQuery}&start=${start}&end=${end}`);
         const data = await response.json();
         populateTable(data);
-        console.log(data);
-        updateGrafana(typeQuery, start, end);
         updateD3(data);
     } catch (error) {
         console.error('Erreur lors de l\'application des filtres:', error);
     }
 }
-
 
 // Fonction pour remplir le tableau avec les données
 async function populateTable(data) {
@@ -48,6 +66,9 @@ async function populateTable(data) {
     const tbody = table.getElementsByTagName('tbody')[0];
     thead.innerHTML = '';
     tbody.innerHTML = '';
+
+    // Trier les données par la colonne "time"
+    data.sort((a, b) => new Date(a.time) - new Date(b.time));
 
     // Ajouter les en-têtes dynamiquement
     if (data.length > 0) {

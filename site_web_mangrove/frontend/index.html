@@ -1,25 +1,43 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Affichage des Données de Capteurs</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <h1>Affichage des Données de Capteurs</h1>
 
-    <!-- Filtres de sélection de types de données -->
-    <section id="filters">
-        <div id="type-checkboxes"></div> <!-- Cases à cocher générées ici -->
+    <section id="first_bloc">
+        <!-- Filtres de sélection de colonnes -->
+        <section id="column-filters">
+            <h3>Colonnes à afficher</h3>
+            <div id="column-checkboxes"></div> <!-- Cases à cocher générées ici -->
         
-        <label for="start">Date de début :</label>
-        <input type="date" id="start">
+            <h3>Types à afficher</h3>
+            <div id="type-checkboxes"></div> <!-- Cases à cocher générées ici -->
+        </section>
 
-        <label for="end">Date de fin :</label>
-        <input type="date" id="end">
+        <!-- Filtres de sélection de types de données -->
+        <section id="filters">
 
+            <h3>Filtres de date</h3>
+            <label for="start">Date de début :</label>
+            <input type="date" id="start">
+
+            <label for="end">Date de fin :</label>
+            <input type="date" id="end">
+        </section>
+    </section>
+
+    <section>
+
+    </section>
+    <section>
         <button onclick="applyFilters()">Appliquer les filtres</button>
         <button onclick="exportCSV()">Exporter en CSV</button>
     </section>
@@ -54,4 +72,5 @@
     <script src="js/grafana.js"></script>
     <script src="js/d3charts.js"></script>
 </body>
+
 </html>
