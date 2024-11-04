@@ -3,7 +3,9 @@
 require_once '../db/dbConfig.php';
 
 try {
-    $stmt = $pdo->query("SELECT colum_name FROM information_schema.columns WHERE table_name = \'Data\' or table_name = \'Sensor\'");
+    $query = 'SELECT DISTINCT type FROM "Data"';
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
     $types = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     echo json_encode($types);

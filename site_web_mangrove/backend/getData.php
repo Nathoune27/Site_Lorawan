@@ -9,10 +9,10 @@ $endDate = $_GET['end'] ?? null;
 try {
     $query = 'SELECT * FROM "Data" WHERE 1=1';
 
-    // if (!empty($types)) {
-    //     $placeholders = implode(',', array_fill(0, count($types), '?'));
-    //     $query .= " AND type IN ($placeholders)";
-    // }
+    if (!empty($types) && $types[0] !== '') {
+        $placeholders = implode(',', array_fill(0, count($types), '?'));
+        $query .= " AND type IN ($placeholders)";
+    }
     if ($startDate) {
         $query .= " AND time >= :start";
     }
@@ -24,9 +24,11 @@ try {
     
     $stmt = $pdo->prepare($query);
 
-    // foreach ($types as $index => $type) {
-    //     $stmt->bindValue($index + 1, $type);
-    // }
+    if (!empty($types) && $types[0] !== '') {
+        foreach ($types as $index => $type) {
+            $stmt->bindValue($index + 1, $type);
+        }
+    }
     if ($startDate) {
         $stmt->bindParam(':start', $startDate);
     }
