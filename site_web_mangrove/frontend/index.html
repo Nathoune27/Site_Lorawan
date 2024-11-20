@@ -63,14 +63,19 @@
         <h2>Graphiques</h2>
         <div id="grafanaGraph" class="graph"></div>
         <div id="d3Graph" class="graph"></div>
+        <canvas id="chartJSGraph" width="800" height="400"></canvas>
     </section>
 
     <!-- Inclusion de la bibliothèque D3.js -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns/locale/fr/index.js"></script>
 
     <script src="js/main.js"></script>
     <script src="js/grafana.js"></script>
     <script src="js/d3charts.js"></script>
+    <script src="js/chart.js"></script>
 </body>
 
 </html>

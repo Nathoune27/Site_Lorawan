@@ -50,6 +50,11 @@ try {
     $stmt->execute();
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Ensure time is in ISO 8601 format
+    foreach ($results as &$row) {
+        $row['time'] = (new DateTime($row['time']))->format(DateTime::ATOM);
+    }
+
     echo json_encode($results);
 } catch (Exception $e) {
     echo json_encode(['error' => $e->getMessage()]);

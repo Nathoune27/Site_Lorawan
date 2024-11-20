@@ -52,11 +52,23 @@ async function applyFilters() {
         const columnQuery = columns.join(',');
         const response = await fetch(`../backend/getData.php?types=${typeQuery}&columns=${columnQuery}&start=${start}&end=${end}`);
         const data = await response.json();
-        populateTable(data, columns);
-        updateD3(data);
+
+        const parsedData = parseTimeData(data);
+
+        populateTable(parsedData, columns);
+        updateD3(parsedData);
+        updateChartJS(parsedData);
     } catch (error) {
         console.error('Erreur lors de l\'application des filtres:', error);
     }
+}
+
+// Function to parse and format time data
+function parseTimeData(data) {
+    return data.map(d => {
+        d.time = new Date(d.time);
+        return d;
+    });
 }
 
 // Fonction pour remplir le tableau avec les données
@@ -88,7 +100,11 @@ async function populateTable(data, columns) {
         const tr = document.createElement('tr');
         selectedHeaders.forEach(header => {
             const td = document.createElement('td');
-            td.textContent = row[header];
+            if (header === 'time') {
+                td.textContent = new Date(row[header]).toLocaleDateString('fr-FR');
+            } else {
+                td.textContent = row[header];
+            }
             tr.appendChild(td);
         });
         tbody.appendChild(tr);
