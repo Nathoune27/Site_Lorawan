@@ -13,3 +13,17 @@ Il reste tout de même des problèmes :
 - Le filtrage des dates fontionne mais on ne peut pas sélectionner les types de données voulus
 - L'export des données en csv ne fontionne pas
 - Les graphes n'affiche rien
+
+Table login 
+```
+CREATE TABLE logins (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    account_type VARCHAR(10) NOT NULL CHECK (account_type IN ('utilisateur', 'admin'))
+);
+
+INSERT INTO logins (username, password, account_type) VALUES
+('utilisateur', '1234', 'utilisateur'),
+('admin', '1234', 'admin');
+```

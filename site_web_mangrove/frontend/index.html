@@ -4,78 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Affichage des Données de Capteurs</title>
+    <title>Page de Connexion</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
-    <h1>Affichage des Données de Capteurs</h1>
-
-    <section id="first_bloc">
-        <!-- Filtres de sélection de colonnes -->
-        <section id="column-filters">
-            <h3>Colonnes à afficher</h3>
-            <div id="column-checkboxes"></div> <!-- Cases à cocher générées ici -->
+    <h1>Connexion</h1>
+    <form action="../backend/login.php" method="post">
+        <label for="username">Nom d'utilisateur :</label>
+        <input type="text" id="username" name="username" required>
         
-            <h3>Types à afficher</h3>
-            <div id="type-checkboxes"></div> <!-- Cases à cocher générées ici -->
-        </section>
-
-        <!-- Filtres de sélection de types de données -->
-        <section id="filters">
-
-            <h3>Filtres de date</h3>
-            <label for="start">Date de début :</label>
-            <input type="date" id="start">
-
-            <label for="end">Date de fin :</label>
-            <input type="date" id="end">
-        </section>
-    </section>
-
-    <section>
-
-    </section>
-    <section>
-        <button onclick="applyFilters()">Appliquer les filtres</button>
-        <button onclick="exportCSV()">Exporter en CSV</button>
-    </section>
-
-
-    <!-- Tableau de données -->
-    <section id="data-table">
-        <h2>Données</h2>
-        <table id="table">
-            <thead>
-                <tr>
-                    <!-- Les en-têtes seront insérés ici par JavaScript -->
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Les données seront insérées ici par JavaScript -->
-            </tbody>
-        </table>
-    </section>
-
-    <!-- Section de graphique -->
-    <section id="graphs">
-        <h2>Graphiques</h2>
-        <div id="grafanaGraph" class="graph"></div>
-        <div id="d3Graph" class="graph"></div>
-        <canvas id="chartJSGraph" width="800" height="400"></canvas>
-    </section>
-
-    <!-- Inclusion de la bibliothèque D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
-    <script src="https://cdn.jsdelivr.net/npm/date-fns/locale/fr/index.js"></script>
-
-    <script src="js/main.js"></script>
-    <script src="js/grafana.js"></script>
-    <script src="js/d3charts.js"></script>
-    <script src="js/chart.js"></script>
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" required>
+        
+        <button type="submit">Se connecter</button>
+    </form>
 </body>
 
 </html>
