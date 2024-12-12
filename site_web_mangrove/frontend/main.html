@@ -6,12 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Affichage des Données de Capteurs</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        // Vérifier la session avant de charger le contenu
+        fetch('../backend/checkSession.php')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.authenticated) {
+                    window.location.href = 'index.html';
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de la vérification de la session:', error);
+                window.location.href = 'index.html';
+            });
+    </script>
 </head>
 
 <body>
 
     <h1>Affichage des Données de Capteurs</h1>
-
+    <button onclick="window.location.href='../backend/logout.php'">Se déconnecter</button>
     <section id="first_bloc">
         <!-- Filtres de sélection de colonnes -->
         <section id="column-filters">

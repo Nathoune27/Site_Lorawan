@@ -6,6 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page de Connexion</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        // Vérifier la session avant de charger le contenu
+        fetch('../backend/checkSession.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.authenticated) {
+                    window.location.href = 'main.html';
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de la vérification de la session:', error);
+            });
+    </script>
 </head>
 
 <body>
