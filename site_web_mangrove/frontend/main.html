@@ -13,12 +13,35 @@
             .then(data => {
                 if (!data.authenticated) {
                     window.location.href = 'index.html';
+                } else {
+                    // Afficher les sections d'administration uniquement pour les administrateurs
+                    if (data.account_type === 'admin') {
+                        document.getElementById('import-section').style.display = 'block';
+                        document.getElementById('add-sensor-section').style.display = 'block';
+                    }
                 }
             })
             .catch(error => {
                 console.error('Erreur lors de la vérification de la session:', error);
                 window.location.href = 'index.html';
             });
+
+        // Afficher un message de confirmation si l'importation ou l'ajout de capteur a réussi
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('import') === 'success') {
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = 'Données importées avec succès.';
+                messageDiv.style.color = 'green';
+                document.body.insertBefore(messageDiv, document.body.firstChild);
+            }
+            if (urlParams.get('sensor') === 'success') {
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = 'Capteur ajouté avec succès.';
+                messageDiv.style.color = 'green';
+                document.body.insertBefore(messageDiv, document.body.firstChild);
+            }
+        };
     </script>
 </head>
 
@@ -26,6 +49,27 @@
 
     <h1>Affichage des Données de Capteurs</h1>
     <button onclick="window.location.href='../backend/logout.php'">Se déconnecter</button>
+
+    <section id="import-section" style="display: none;">
+        <h3>Importer des données</h3>
+        <form action="../backend/import.php" method="post" enctype="multipart/form-data">
+            <label for="csvFile">Choisir un fichier CSV :</label>
+            <input type="file" id="csvFile" name="csvFile" accept=".csv" required>
+            <button type="submit">Importer</button>
+        </form>
+    </section>
+
+    <section id="add-sensor-section" style="display: none;">
+        <h3>Ajouter un capteur</h3>
+        <form action="../backend/addSensor.php" method="post">
+            <label for="devEUI">devEUI :</label>
+            <input type="text" id="devEUI" name="devEUI" required>
+            <label for="sensorName">Nom du capteur :</label>
+            <input type="text" id="sensorName" name="sensorName" required>
+            <button type="submit">Ajouter</button>
+        </form>
+    </section>
+
     <section id="first_bloc">
         <!-- Filtres de sélection de colonnes -->
         <section id="column-filters">
@@ -55,7 +99,6 @@
         <button onclick="applyFilters()">Appliquer les filtres</button>
         <button onclick="exportCSV()">Exporter en CSV</button>
     </section>
-
 
     <!-- Tableau de données -->
     <section id="data-table">

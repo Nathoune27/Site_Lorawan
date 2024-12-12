@@ -19,6 +19,7 @@ try {
     if ($user) {
         // Définir une variable de session pour l'utilisateur authentifié
         $_SESSION['username'] = $username;
+        $_SESSION['account_type'] = $user['account_type']; // Définir le type de compte dans la session
         // Redirection vers main.html en cas de succès
         header('Location: ../frontend/main.html');
         exit();
