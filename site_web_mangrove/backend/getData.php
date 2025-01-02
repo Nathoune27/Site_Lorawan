@@ -1,9 +1,9 @@
 <?php
-// backend/getData.php
 require_once '../db/dbConfig.php';
 
 $columns = explode(',', $_GET['columns'] ?? '');
 $types = explode(',', $_GET['types'] ?? '');
+$sensors = explode(',', $_GET['sensors'] ?? '');
 $startDate = $_GET['start'] ?? null;
 $endDate = $_GET['end'] ?? null;
 
@@ -24,6 +24,12 @@ try {
         }, array_keys($types)));
         $query .= " AND type IN ($placeholders)";
     }
+    if (!empty($sensors) && $sensors[0] !== '') {
+        $placeholders = implode(',', array_map(function($index) {
+            return ":sensor$index";
+        }, array_keys($sensors)));
+        $query .= " AND \"devEUI\" IN ($placeholders)";
+    }
     if ($startDate) {
         $query .= " AND time >= :start";
     }
@@ -38,6 +44,11 @@ try {
     if (!empty($types) && $types[0] !== '') {
         foreach ($types as $index => $type) {
             $stmt->bindValue(":type$index", $type);
+        }
+    }
+    if (!empty($sensors) && $sensors[0] !== '') {
+        foreach ($sensors as $index => $sensor) {
+            $stmt->bindValue(":sensor$index", $sensor);
         }
     }
     if ($startDate) {

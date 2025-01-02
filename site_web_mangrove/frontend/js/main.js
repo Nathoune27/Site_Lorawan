@@ -17,6 +17,8 @@ async function loadDataTypes() {
     }
 }
 
+// js/main.js
+
 // Fonction pour charger les noms des colonnes depuis la base et générer les cases à cocher
 async function loadColumnNames() {
     try {
@@ -34,23 +36,43 @@ async function loadColumnNames() {
     }
 }
 
-// Appeler loadDataTypes() et loadColumnNames() lors du chargement de la page
+// Fonction pour charger les sondes depuis la base et générer les cases à cocher
+async function loadSensors() {
+    try {
+        const response = await fetch('../backend/getSensors.php');
+        const sensors = await response.json();
+        
+        const checkboxesDiv = document.getElementById('sensor-checkboxes');
+        sensors.forEach(sensor => {
+            const label = document.createElement('label');
+            label.innerHTML = `<input type="checkbox" value="${sensor.devEUI}" class="sensor-checkbox"> ${sensor.devEUI}`;
+            checkboxesDiv.appendChild(label);
+        });
+    } catch (error) {
+        console.error('Erreur lors du chargement des sondes:', error);
+    }
+}
+
+// Appeler loadSensors() lors du chargement de la page
 document.addEventListener("DOMContentLoaded", () => {
     loadDataTypes();
     loadColumnNames();
+    loadSensors();
 });
 
-// Fonction pour appliquer les filtres
+// Modifier la fonction applyFilters pour inclure les sondes sélectionnées
 async function applyFilters() {
     try {
         const types = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(cb => cb.value);
         const columns = Array.from(document.querySelectorAll('.column-checkbox:checked')).map(cb => cb.value);
+        const sensors = Array.from(document.querySelectorAll('.sensor-checkbox:checked')).map(cb => cb.value);
         const start = document.getElementById('start').value;
         const end = document.getElementById('end').value;
 
         const typeQuery = types.join(',');
         const columnQuery = columns.join(',');
-        const response = await fetch(`../backend/getData.php?types=${typeQuery}&columns=${columnQuery}&start=${start}&end=${end}`);
+        const sensorQuery = sensors.join(',');
+        const response = await fetch(`../backend/getData.php?types=${typeQuery}&columns=${columnQuery}&sensors=${sensorQuery}&start=${start}&end=${end}`);
         const data = await response.json();
 
         const parsedData = parseTimeData(data);
