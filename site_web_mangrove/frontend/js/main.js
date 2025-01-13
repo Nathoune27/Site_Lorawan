@@ -17,8 +17,6 @@ async function loadDataTypes() {
     }
 }
 
-// js/main.js
-
 // Fonction pour charger les noms des colonnes depuis la base et générer les cases à cocher
 async function loadColumnNames() {
     try {
@@ -36,49 +34,32 @@ async function loadColumnNames() {
     }
 }
 
-// Fonction pour charger les sondes depuis la base et générer les cases à cocher
-async function loadSensors() {
-    try {
-        const response = await fetch('../backend/getSensors.php');
-        const sensors = await response.json();
-        
-        const checkboxesDiv = document.getElementById('sensor-checkboxes');
-        sensors.forEach(sensor => {
-            const label = document.createElement('label');
-            label.innerHTML = `<input type="checkbox" value="${sensor.devEUI}" class="sensor-checkbox"> ${sensor.devEUI}`;
-            checkboxesDiv.appendChild(label);
-        });
-    } catch (error) {
-        console.error('Erreur lors du chargement des sondes:', error);
-    }
-}
-
-// Appeler loadSensors() lors du chargement de la page
+// Appeler loadDataTypes() et loadColumnNames() lors du chargement de la page
 document.addEventListener("DOMContentLoaded", () => {
     loadDataTypes();
     loadColumnNames();
-    loadSensors();
 });
 
-// Modifier la fonction applyFilters pour inclure les sondes sélectionnées
+// Fonction pour appliquer les filtres
 async function applyFilters() {
     try {
         const types = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(cb => cb.value);
         const columns = Array.from(document.querySelectorAll('.column-checkbox:checked')).map(cb => cb.value);
-        const sensors = Array.from(document.querySelectorAll('.sensor-checkbox:checked')).map(cb => cb.value);
         const start = document.getElementById('start').value;
         const end = document.getElementById('end').value;
 
         const typeQuery = types.join(',');
         const columnQuery = columns.join(',');
-        const sensorQuery = sensors.join(',');
-        const response = await fetch(`../backend/getData.php?types=${typeQuery}&columns=${columnQuery}&sensors=${sensorQuery}&start=${start}&end=${end}`);
+        const response = await fetch(`../backend/getData.php?types=${typeQuery}&columns=${columnQuery}&start=${start}&end=${end}`);
         const data = await response.json();
+
+        console.log('Données récupérées:', data); // Ajoutez ce log pour vérifier les données récupérées
 
         const parsedData = parseTimeData(data);
 
+        console.log('Données formatées:', parsedData); // Ajoutez ce log pour vérifier les données formatées
+
         populateTable(parsedData, columns);
-        updateD3(parsedData);
         updateChartJS(parsedData);
     } catch (error) {
         console.error('Erreur lors de l\'application des filtres:', error);
@@ -104,7 +85,6 @@ async function populateTable(data, columns) {
     // Ordre des colonnes souhaité
     const headersOrder = ['devEUI', 'time', 'type', 'data'];
     
-
     // Filtrer les colonnes sélectionnées dans l'ordre souhaité
     const selectedHeaders = headersOrder.filter(header => columns.includes(header));
 
@@ -123,7 +103,14 @@ async function populateTable(data, columns) {
         selectedHeaders.forEach(header => {
             const td = document.createElement('td');
             if (header === 'time') {
-                td.textContent = new Date(row[header]).toLocaleDateString('fr-FR');
+                td.textContent = new Date(row[header]).toLocaleString('fr-FR', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    second: 'numeric'
+                });
             } else {
                 td.textContent = row[header];
             }

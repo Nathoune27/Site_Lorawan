@@ -1,53 +1,81 @@
 // js/chart.js
 
-async function updateChartJS(data) {
-    console.log('ChartJS data:', data); // Log the data received by ChartJS
+let chart; // Déclarez une variable globale pour le graphique
 
-    // Ensure time data is in Date format
-    data.forEach(d => {
-        d.time = new Date(d.time);
-    });
-
-    // Obtenir le contexte du canvas Chart.js
+function updateChartJS(data) {
     const ctx = document.getElementById('chartJSGraph').getContext('2d');
 
-    // Grouper les données par type
-    const groupedData = d3.groups(data, d => d.type);
+    // Détruisez le graphique existant s'il existe
+    if (chart) {
+        chart.destroy();
+    }
 
-    // Préparer les datasets pour chaque type de donnée
-    const datasets = groupedData.map(([type, values]) => {
-        return {
-            label: type,
-            data: values.map(d => ({ x: d.time, y: d.data })), // Chart.js comprend {x, y}
-            borderColor: getRandomColor(),
-            fill: false
-        };
-    });
+    // Groupez les données par type
+    const groupedData = data.reduce((acc, d) => {
+        if (!acc[d.type]) {
+            acc[d.type] = [];
+        }
+        acc[d.type].push({ x: d.time, y: d.data });
+        return acc;
+    }, {});
 
-    // Créer le graphique
-    new Chart(ctx, {
+    // Créez un dataset pour chaque type
+    const datasets = Object.keys(groupedData).map(type => ({
+        label: type,
+        data: groupedData[type],
+        borderColor: getRandomColor(),
+        borderWidth: 1,
+        fill: false
+    }));
+
+    // Créez le nouveau graphique
+    chart = new Chart(ctx, {
         type: 'line',
         data: {
-            datasets
+            datasets: datasets
         },
         options: {
             scales: {
                 x: {
                     type: 'time',
-                    time: { unit: 'hour' }, // Affichage des heures
-                    adapters: {
-                        date: {
-                            locale: window.dateFnsLocaleFr
+                    time: {
+                        unit: 'day', // Ajustez l'unité de temps pour gérer les grandes plages de dates
+                        tooltipFormat: 'PPpp', // Format de date et heure
+                        displayFormats: {
+                            minute: 'MMM d, h:mm a',
+                            hour: 'MMM d, h:mm a',
+                            day: 'MMM d, yyyy'
                         }
                     },
-                    ticks: {
-                        callback: function(value) {
-                            return new Date(value).toLocaleDateString('fr-FR');
-                        }
+                    title: {
+                        display: true,
+                        text: 'Date et Heure'
                     }
                 },
                 y: {
-                    beginAtZero: true
+                    title: {
+                        display: true,
+                        text: 'Valeur'
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.dataset.label || '';
+                            const value = context.raw.y;
+                            const time = new Date(context.raw.x).toLocaleString('fr-FR', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                second: 'numeric'
+                            });
+                            return `${label}: ${value} (${time})`;
+                        }
+                    }
                 }
             }
         }

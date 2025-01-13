@@ -78,9 +78,6 @@
         
             <h3>Types à afficher</h3>
             <div id="type-checkboxes"></div> <!-- Cases à cocher générées ici -->
-
-            <h3>Sondes à afficher</h3>
-            <div id="sensor-checkboxes"></div> <!-- Cases à cocher générées ici -->
         </section>
 
         <!-- Filtres de sélection de types de données -->
@@ -88,10 +85,10 @@
 
             <h3>Filtres de date</h3>
             <label for="start">Date de début :</label>
-            <input type="date" id="start">
+            <input type="datetime-local" id="start" value="2023-01-01T00:00">
 
             <label for="end">Date de fin :</label>
-            <input type="date" id="end">
+            <input type="datetime-local" id="end" value="2023-12-31T23:59">
         </section>
     </section>
 
@@ -121,20 +118,14 @@
     <!-- Section de graphique -->
     <section id="graphs">
         <h2>Graphiques</h2>
-        <div id="grafanaGraph" class="graph"></div>
-        <div id="d3Graph" class="graph"></div>
         <canvas id="chartJSGraph" width="800" height="400"></canvas>
     </section>
 
-    <!-- Inclusion de la bibliothèque D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <script src="https://cdn.jsdelivr.net/npm/date-fns/locale/fr/index.js"></script>
 
     <script src="js/main.js"></script>
-    <script src="js/grafana.js"></script>
-    <script src="js/d3charts.js"></script>
     <script src="js/chart.js"></script>
 </body>
 

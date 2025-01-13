@@ -1,9 +1,9 @@
 <?php
+// backend/getData.php
 require_once '../db/dbConfig.php';
 
 $columns = explode(',', $_GET['columns'] ?? '');
 $types = explode(',', $_GET['types'] ?? '');
-$sensors = explode(',', $_GET['sensors'] ?? '');
 $startDate = $_GET['start'] ?? null;
 $endDate = $_GET['end'] ?? null;
 
@@ -24,12 +24,6 @@ try {
         }, array_keys($types)));
         $query .= " AND type IN ($placeholders)";
     }
-    if (!empty($sensors) && $sensors[0] !== '') {
-        $placeholders = implode(',', array_map(function($index) {
-            return ":sensor$index";
-        }, array_keys($sensors)));
-        $query .= " AND \"devEUI\" IN ($placeholders)";
-    }
     if ($startDate) {
         $query .= " AND time >= :start";
     }
@@ -46,11 +40,6 @@ try {
             $stmt->bindValue(":type$index", $type);
         }
     }
-    if (!empty($sensors) && $sensors[0] !== '') {
-        foreach ($sensors as $index => $sensor) {
-            $stmt->bindValue(":sensor$index", $sensor);
-        }
-    }
     if ($startDate) {
         $stmt->bindParam(':start', $startDate);
     }
@@ -62,9 +51,9 @@ try {
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Ensure time is in ISO 8601 format
-    foreach ($results as &$row) {
-        $row['time'] = (new DateTime($row['time']))->format(DateTime::ATOM);
-    }
+    // foreach ($results as &$row) {
+    //     $row['time'] = (new DateTime($row['time']))->format(DateTime::ATOM);
+    // }
 
     echo json_encode($results);
 } catch (Exception $e) {
